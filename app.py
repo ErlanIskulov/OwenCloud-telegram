@@ -1,5 +1,6 @@
 from flask import Flask, request
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -15,9 +16,9 @@ def webhook():
     data = request.json
     message = f"📡 OwenCloud уведомление:\n{data}"
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    payload = {
-        'chat_id': CHAT_ID,
-        'text': message
-    }
-    requests.post(url, data=payload)
+    requests.post(url, data={'chat_id': CHAT_ID, 'text': message})
     return 'OK'
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
